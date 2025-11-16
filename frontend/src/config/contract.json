@@ -1,0 +1,86 @@
+{
+  "address": "0x20eFe3c5D0749c533CAe196c2d1452f10Fa87304",
+  "abi": [
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "CommentPosted",
+      "inputs": [
+        {
+          "type": "string",
+          "name": "topic",
+          "indexed": true
+        },
+        {
+          "type": "address",
+          "name": "author",
+          "indexed": true
+        },
+        {
+          "type": "string",
+          "name": "content",
+          "indexed": false
+        },
+        {
+          "type": "uint256",
+          "name": "timestamp",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getComments",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": "_topic"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "tuple[]",
+          "name": "",
+          "components": [
+            {
+              "type": "uint256",
+              "name": "id"
+            },
+            {
+              "type": "address",
+              "name": "author"
+            },
+            {
+              "type": "string",
+              "name": "content"
+            },
+            {
+              "type": "uint256",
+              "name": "timestamp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "postComment",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": "_topic"
+        },
+        {
+          "type": "string",
+          "name": "_content"
+        }
+      ],
+      "outputs": []
+    }
+  ]
+}
