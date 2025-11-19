@@ -1,4 +1,6 @@
+import { MessageSquare, User, Clock } from 'lucide-react';
 import { Comment } from '../config/contract';
+import { cn } from '../lib/utils';
 
 interface CommentListProps {
   comments: Comment[];
@@ -7,8 +9,9 @@ interface CommentListProps {
 function CommentList({ comments }: CommentListProps) {
   if (comments.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
-        暂无评论，快来发表第一条评论吧！
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <MessageSquare className="w-16 h-16 text-slate-300 mb-4" />
+        <p className="text-slate-500 text-lg">暂无评论，快来发表第一条评论吧！</p>
       </div>
     );
   }
@@ -23,23 +26,26 @@ function CommentList({ comments }: CommentListProps) {
   };
 
   return (
-    <div>
-      {comments.map((comment) => (
+    <div className="space-y-4">
+      {comments.map((comment, index) => (
         <div
           key={comment.id.toString()}
-          style={{
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            padding: '15px',
-            marginBottom: '15px',
-            backgroundColor: '#f9f9f9',
-          }}
+          className={cn(
+            "bg-white rounded-lg shadow-sm border border-slate-200",
+            "p-5 transition-all duration-200 hover:shadow-md hover:border-slate-300"
+          )}
         >
-          <div style={{ fontSize: '14px', color: '#666', marginBottom: '10px' }}>
-            <strong>{formatAddress(comment.author)}</strong>
-            <span style={{ marginLeft: '10px' }}>{formatTimestamp(comment.timestamp)}</span>
+          <div className="flex items-center gap-3 mb-3 text-sm text-slate-600">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4" />
+              <span className="font-mono font-medium">{formatAddress(comment.author)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              <span>{formatTimestamp(comment.timestamp)}</span>
+            </div>
           </div>
-          <div style={{ fontSize: '16px', lineHeight: '1.5' }}>
+          <div className="text-slate-800 leading-relaxed whitespace-pre-wrap">
             {comment.content}
           </div>
         </div>
