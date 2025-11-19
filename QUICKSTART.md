@@ -1,54 +1,56 @@
-# 快速开始指南
+# Quick Start Guide
 
-本指南将帮助您快速搭建和部署 DeCom 开发环境。
+[中文文档](./QUICKSTART_CN.md)
 
-## 1. 环境准备
+This guide will help you quickly set up and deploy the DeCom development environment.
+
+## 1. Prerequisites
 
 *   **Node.js**: >= 18.x
-*   **包管理器**: pnpm (`npm i -g pnpm`)
-*   **钱包**: MetaMask (需有 Sepolia 测试币)
-*   **服务**: Infura/Alchemy (RPC URL) 和 WalletConnect (Project ID)
+*   **Package Manager**: pnpm (`npm i -g pnpm`)
+*   **Wallet**: MetaMask (with Sepolia testnet ETH)
+*   **Services**: Infura/Alchemy (RPC URL) and WalletConnect (Project ID)
 
-## 2. 部署流程
+## 2. Deployment Process
 
-### 2.1 安装与配置
+### 2.1 Installation & Configuration
 
 ```bash
-# 克隆并安装依赖
+# Clone and install dependencies
 git clone https://github.com/Xeron2000/DeCom.git
 cd DeCom
 pnpm install
 cd frontend && pnpm install && cd ..
 
-# 配置环境变量
-# 创建 .env 文件并填入以下内容：
+# Configure environment variables
+# Create a .env file and fill in the following:
 # SEPOLIA_RPC_URL=https://...
-# PRIVATE_KEY=... (不带 0x)
+# PRIVATE_KEY=... (without 0x)
 ```
 
-### 2.2 部署合约
+### 2.2 Deploy Contract
 
 ```bash
-# 编译并部署到 Sepolia
+# Compile and deploy to Sepolia
 pnpm compile
 pnpm deploy:sepolia
 ```
 
-> 部署脚本会自动更新 `frontend/src/config/contract.json`。
+> The deployment script will automatically update `frontend/src/config/contract.json`.
 
-### 2.3 启动前端
+### 2.3 Start Frontend
 
-在使用前，请确保在 `frontend/src/config/wagmi.ts` 中填入您的 WalletConnect Project ID。
+Before starting, please ensure you have filled in your WalletConnect Project ID in `frontend/src/config/wagmi.ts`.
 
 ```bash
 cd frontend
 pnpm dev
 ```
 
-访问 `http://localhost:5173` 即可体验。
+Visit `http://localhost:5173` to experience the application.
 
-## 常见问题
+## Troubleshooting
 
-*   **部署失败**: 检查 RPC URL 是否有效，账户是否有足够 Sepolia ETH。
-*   **钱包连接失败**: 检查 `wagmi.ts` 中的 Project ID。
-*   **Nonce 错误**: 在 MetaMask 中重置账户交易记录。
+*   **Deployment Failed**: Check if the RPC URL is valid and if the account has enough Sepolia ETH.
+*   **Wallet Connection Failed**: Check the Project ID in `wagmi.ts`.
+*   **Nonce Error**: Reset the account transaction history in MetaMask.
