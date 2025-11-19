@@ -1,61 +1,38 @@
 # 快速开始指南
 
-## 📋 前置准备
+本指南将帮助您快速搭建和部署 DeCom 去中心化评论系统。
+
+## 前置准备
 
 ### 1. 安装必要工具
 - **Node.js**: 18.x 或更高版本
-- **pnpm**: `npm install -g pnpm`
+- **pnpm**: 推荐使用 pnpm 管理依赖 (`npm install -g pnpm`)
 - **MetaMask**: 浏览器钱包插件
 
 ### 2. 获取必要的密钥和账户
 
 #### 2.1 获取 Sepolia 测试网 RPC URL
-选择以下任一服务：
-
-**Infura (推荐):**
-1. 访问 https://infura.io
-2. 注册账户并创建新项目
-3. 选择 Ethereum 网络
-4. 复制 Sepolia 测试网的 HTTPS 端点
-5. 格式：`https://sepolia.infura.io/v3/YOUR_PROJECT_ID`
-
-**Alchemy:**
-1. 访问 https://alchemy.com
-2. 注册账户并创建新应用
-3. 选择 Sepolia 网络
-4. 复制 HTTPS URL
+推荐使用 Infura 或 Alchemy 获取 Sepolia 测试网的 RPC 节点地址。
 
 #### 2.2 准备部署账户
-1. 在 MetaMask 中创建新账户或使用现有账户
-2. 导出私钥：
-   - 点击账户详情
-   - 点击"导出私钥"
-   - 输入密码确认
-   - **⚠️ 重要：私钥仅用于测试，不要使用主账户！**
+在 MetaMask 中创建一个新的测试账户，并导出其私钥。
+**注意：私钥仅用于测试，请勿在生产环境中使用主账户私钥。**
 
 #### 2.3 获取测试网 ETH
-访问以下水龙头获取免费的 Sepolia ETH：
-- https://sepoliafaucet.com/
-- https://www.alchemy.com/faucets/ethereum-sepolia
-- https://sepolia-faucet.pk910.de/
-
-通常需要 0.1-0.5 ETH 用于部署和测试。
+访问 Sepolia 水龙头（如 Sepolia Faucet）获取测试代币，用于支付部署和交互的 Gas 费用。
 
 #### 2.4 获取 WalletConnect Project ID
-1. 访问 https://cloud.walletconnect.com
-2. 注册账户
-3. 创建新项目
-4. 复制 Project ID
+访问 WalletConnect Cloud 注册并创建项目，获取 Project ID 以支持钱包连接功能。
 
 ---
 
-## 🚀 部署步骤
+## 部署步骤
 
 ### 步骤 1: 安装依赖
 
 ```bash
 # 进入项目目录
-cd decentralized-comments
+cd DeCom
 
 # 安装合约依赖
 pnpm install
@@ -68,14 +45,7 @@ cd ..
 
 ### 步骤 2: 配置环境变量
 
-在项目根目录创建 `.env` 文件：
-
-```bash
-# 复制示例文件
-cp .env.example .env
-```
-
-编辑 `.env` 文件，填入以下内容：
+在项目根目录创建 `.env` 文件，并填入以下配置：
 
 ```env
 # Sepolia 测试网 RPC URL
@@ -88,40 +58,25 @@ PRIVATE_KEY=your_private_key_here
 ### 步骤 3: 编译智能合约
 
 ```bash
-# 在项目根目录执行
 pnpm compile
-```
-
-**预期输出：**
-```
-Compiled 1 Solidity file successfully
 ```
 
 ### 步骤 4: 部署智能合约到 Sepolia
 
 ```bash
-# 在项目根目录执行
 pnpm deploy:sepolia
 ```
 
-**预期输出：**
-```
-正在部署 CommentSystem 合约...
-CommentSystem 部署成功！
-合约地址: 0x1234567890abcdef1234567890abcdef12345678
-合约信息已保存到 frontend/src/config/contract.json
-```
+部署成功后，控制台将输出合约地址。请务必记录该地址，后续前端配置将需要使用。
 
-**⚠️ 重要：记录下合约地址，后续可能需要用到！**
+### 步骤 5: 配置前端
 
-### 步骤 5: 配置 WalletConnect
-
-编辑 `frontend/src/config/wagmi.ts` 文件：
+编辑 `frontend/src/config/wagmi.ts` 文件，填入您的 WalletConnect Project ID：
 
 ```typescript
 export const config = getDefaultConfig({
   appName: '去中心化评论系统',
-  projectId: 'YOUR_WALLETCONNECT_PROJECT_ID', // 替换为你的 Project ID
+  projectId: 'YOUR_WALLETCONNECT_PROJECT_ID',
   chains: [sepolia],
   ssr: false,
 });
@@ -130,111 +85,37 @@ export const config = getDefaultConfig({
 ### 步骤 6: 启动前端应用
 
 ```bash
-# 进入前端目录
 cd frontend
-
-# 启动开发服务器
 pnpm dev
 ```
 
-**预期输出：**
-```
-  VITE v5.x.x  ready in xxx ms
-
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose
-```
-
-### 步骤 7: 在浏览器中测试
-
-1. 打开浏览器访问 http://localhost:5173
-2. 确保 MetaMask 已安装并切换到 Sepolia 测试网
-3. 点击 "Connect Wallet" 按钮
-4. 在 MetaMask 中确认连接
-5. 在评论框输入内容
-6. 点击"发表评论"
-7. 在 MetaMask 中确认交易
-8. 等待交易确认（通常 10-30 秒）
-9. 评论会自动显示在列表中
+访问 `http://localhost:5173` 即可看到运行中的应用。
 
 ---
 
-## 🔍 验证部署
+## 验证与测试
 
-### 在 Etherscan 上查看合约
-
-1. 访问 https://sepolia.etherscan.io/
-2. 在搜索框输入你的合约地址
-3. 可以看到：
-   - 合约创建交易
-   - 合约余额
-   - 所有交易记录
-
-### 查看交易详情
-
-发表评论后，可以在 Etherscan 上查看交易：
-1. 复制交易哈希（显示在前端界面）
-2. 在 Etherscan 搜索框粘贴
-3. 查看交易详情、Gas 费用、事件日志等
+1. 确保 MetaMask 已切换至 Sepolia 测试网。
+2. 点击页面上的 "Connect Wallet" 连接钱包。
+3. 尝试发表一条评论，并在 MetaMask 中确认交易。
+4. 等待交易确认后，评论应立即显示在列表中。
 
 ---
 
-## 🐛 常见问题
+## 常见问题
 
-### 问题 1: 部署失败 - "insufficient funds"
-**原因：** 账户余额不足
-**解决：** 从水龙头获取更多测试网 ETH
+### 部署失败 (insufficient funds)
+请检查部署账户是否有足够的 Sepolia ETH。
 
-### 问题 2: 交易失败 - "nonce too low"
-**原因：** 交易 nonce 冲突
-**解决：** 在 MetaMask 中重置账户（设置 -> 高级 -> 重置账户）
+### 交易失败 (nonce too low)
+在 MetaMask 设置中重置账户交易历史。
 
-### 问题 3: 前端无法连接钱包
-**原因：** WalletConnect Project ID 未配置
-**解决：** 检查 `frontend/src/config/wagmi.ts` 中的 projectId
-
-### 问题 4: 评论不显示
-**原因：** 合约地址未正确配置
-**解决：** 检查 `frontend/src/config/contract.ts` 中的 CONTRACT_ADDRESS
-
-### 问题 5: MetaMask 显示错误的网络
-**原因：** 未切换到 Sepolia 测试网
-**解决：** 在 MetaMask 中手动切换到 Sepolia 测试网
+### 前端无法连接钱包
+检查 `wagmi.ts` 中的 Project ID 是否正确。
 
 ---
 
-## 📊 Gas 费用估算
+## Gas 费用估算
 
-- **部署合约**: ~0.01-0.02 ETH
-- **发表评论**: ~0.0005-0.001 ETH
-- **读取评论**: 免费（只读操作）
-
----
-
-## 🎯 下一步
-
-### 功能扩展建议
-1. 添加评论点赞功能
-2. 实现评论编辑和删除
-3. 添加用户个人资料
-4. 实现评论分页
-5. 添加评论搜索功能
-
-### 部署到生产环境
-1. 部署合约到主网（需要真实 ETH）
-2. 构建前端生产版本：`pnpm build`
-3. 部署到 Vercel/Netlify
-
----
-
-## 📚 相关资源
-
-- **Hardhat 文档**: https://hardhat.org/docs
-- **wagmi 文档**: https://wagmi.sh
-- **RainbowKit 文档**: https://www.rainbowkit.com
-- **Sepolia 浏览器**: https://sepolia.etherscan.io
-- **Solidity 文档**: https://docs.soliditylang.org
-
----
-
-**祝您测试顺利！** 🎉
+- **部署合约**: 约 0.01-0.02 ETH
+- **发表评论**: 约 0.0005-0.001 ETH
