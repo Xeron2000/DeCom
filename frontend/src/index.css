@@ -3,26 +3,87 @@
 @tailwind utilities;
 
 @layer base {
-    body {
-        background-color: #ffffff;
-        color: #000000;
-        font-family: 'Inter', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+    :root {
+        --background: #ffffff;
+        --foreground: #000000;
+
+        --accents-1: #fafafa;
+        --accents-2: #eaeaea;
+        --accents-3: #999999;
+        --accents-4: #888888;
+        --accents-5: #666666;
+        --accents-6: #444444;
+        --accents-7: #333333;
+        --accents-8: #111111;
+
+        --success: #0070f3;
+        --success-lighter: #d3e5ff;
+        --success-darker: #0761d1;
+
+        --error: #e00;
+        --error-lighter: #f7d4d6;
+        --error-darker: #c50000;
+
+        --warning: #f5a623;
+        --warning-lighter: #ffefcf;
+        --warning-darker: #ab570a;
+
+        --violet: #7928ca;
+        --violet-lighter: #e3d7fc;
+        --violet-darker: #4c1d95;
+
+        --cyan: #50e3c2;
+        --cyan-lighter: #aaffec;
+        --cyan-darker: #29bc9b;
     }
 
-    ::selection {
-        background-color: #000000;
-        color: #ffffff;
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --background: #000000;
+            --foreground: #ffffff;
+
+            --accents-1: #111111;
+            --accents-2: #333333;
+            --accents-3: #444444;
+            --accents-4: #666666;
+            --accents-5: #888888;
+            --accents-6: #999999;
+            --accents-7: #eaeaea;
+            --accents-8: #fafafa;
+
+            --success: #0070f3;
+            --success-lighter: #d3e5ff;
+            --success-darker: #0761d1;
+        }
+    }
+
+    body {
+        @apply bg-background text-foreground font-sans antialiased selection:bg-success selection:text-white;
     }
 }
 
 @layer utilities {
-    .glass {
-        @apply bg-white/80 backdrop-blur-md border-b border-gray-200;
+    .container-width {
+        @apply max-w-[1000px] mx-auto px-6;
     }
 
-    .glass-card {
-        @apply bg-white border border-gray-200 shadow-sm;
+    .geist-card {
+        @apply border border-accents-2 rounded-lg bg-background transition-all duration-200 hover:border-foreground/20;
+    }
+
+    .geist-button {
+        @apply px-4 py-2 rounded-md font-medium transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .geist-button-primary {
+        @apply geist-button bg-foreground text-background hover:bg-accents-7;
+    }
+
+    .geist-button-secondary {
+        @apply geist-button border border-accents-2 hover:border-foreground text-foreground bg-background;
+    }
+
+    .geist-input {
+        @apply w-full px-3 py-2 rounded-md border border-accents-2 bg-background transition-colors duration-200 focus:outline-none focus:border-foreground focus:ring-1 focus:ring-foreground placeholder:text-accents-3;
     }
 }

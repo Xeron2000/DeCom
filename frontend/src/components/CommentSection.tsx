@@ -1,5 +1,6 @@
 import { useReadContract } from 'wagmi';
 import { Loader2 } from 'lucide-react';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { CONTRACT_ADDRESS, CONTRACT_ABI, Comment } from '../config/contract';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
@@ -22,27 +23,34 @@ function CommentSection({ topic }: CommentSectionProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-24">
-        <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+      <div className="flex flex-col items-center justify-center py-24">
+        <Loader2 className="w-6 h-6 animate-spin text-accents-3 mb-4" />
+        <p className="text-accents-4">Loading discussions...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-12">
-      <section>
-        <h2 className="text-2xl font-bold tracking-tight mb-6">Discussion</h2>
-        <CommentForm topic={topic} onSuccess={handleCommentPosted} />
-      </section>
+    <div className="animate-fade-in w-full max-w-3xl mx-auto">
+      {/* Microservice Header */}
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-xl font-bold tracking-tight">Discussion</h2>
+        <ConnectButton
+          showBalance={false}
+          chainStatus="icon"
+          accountStatus="avatar"
+        />
+      </div>
 
-      <section>
-        <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-            {comments?.length || 0} Comments
-          </h3>
-        </div>
-        <CommentList comments={(comments as Comment[]) || []} topic={topic} />
-      </section>
+      <CommentForm topic={topic} onSuccess={handleCommentPosted} />
+
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-accents-2">
+        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+          {comments?.length || 0} Comments
+        </h3>
+      </div>
+
+      <CommentList comments={(comments as Comment[]) || []} topic={topic} />
     </div>
   );
 }

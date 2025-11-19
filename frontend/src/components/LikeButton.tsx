@@ -3,7 +3,8 @@ import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { toast } from 'sonner';
-import contractConfig from '../config/contract.json';
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../config/contract';
+import { cn } from '../lib/utils';
 
 interface LikeButtonProps {
     topic: string;
@@ -13,7 +14,7 @@ interface LikeButtonProps {
 
 export function LikeButton({ topic, commentId, initialLikes }: LikeButtonProps) {
     const [likes, setLikes] = useState(Number(initialLikes));
-    const [isLiked, setIsLiked] = useState(false); // In a real app, check if user liked from contract/graph
+    const [isLiked, setIsLiked] = useState(false);
 
     const { writeContract, data: hash, isPending } = useWriteContract();
 
@@ -26,8 +27,8 @@ export function LikeButton({ topic, commentId, initialLikes }: LikeButtonProps) 
 
         try {
             writeContract({
-                address: contractConfig.address as `0x${string}`,
-                abi: contractConfig.abi,
+                address: CONTRACT_ADDRESS,
+                abi: CONTRACT_ABI,
                 functionName: 'likeComment',
                 args: [topic, commentId],
             });
@@ -46,8 +47,10 @@ export function LikeButton({ topic, commentId, initialLikes }: LikeButtonProps) 
         <button
             onClick={handleLike}
             disabled={isPending || isConfirming || isLiked}
-            className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${isLiked ? 'text-red-500' : 'text-gray-400 hover:text-black'
-                }`}
+            className={cn(
+                "flex items-center gap-1.5 text-xs font-medium transition-colors",
+                isLiked ? "text-error" : "text-accents-4 hover:text-foreground"
+            )}
         >
             <div className="relative">
                 <AnimatePresence>
@@ -56,13 +59,13 @@ export function LikeButton({ topic, commentId, initialLikes }: LikeButtonProps) 
                             initial={{ scale: 0 }}
                             animate={{ scale: 1.5, opacity: 0 }}
                             exit={{ opacity: 0 }}
-                            className="absolute inset-0 text-red-500"
+                            className="absolute inset-0 text-error"
                         >
                             <Heart className="w-3.5 h-3.5 fill-current" />
                         </motion.div>
                     )}
                 </AnimatePresence>
-                <Heart className={`w-3.5 h-3.5 ${isLiked ? 'fill-current' : ''}`} />
+                <Heart className={cn("w-3.5 h-3.5", isLiked && "fill-current")} />
             </div>
             <span>{likes}</span>
         </button>

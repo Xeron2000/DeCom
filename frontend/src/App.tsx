@@ -1,35 +1,32 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
-import { config } from './config/wagmi';
-import CommentSection from './components/CommentSection';
 import { Toaster } from 'sonner';
-
-const queryClient = new QueryClient();
+import CommentSection from './components/CommentSection';
 
 function App() {
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen bg-background text-foreground selection:bg-black selection:text-white">
-          <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-sm">
-            <div className="max-w-5xl mx-auto flex h-16 items-center justify-between px-6">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 bg-black rounded-full" />
-                <span className="font-bold text-lg tracking-tight">DeCom</span>
-              </div>
-              <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
-            </div>
-          </header>
+    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-success selection:text-white">
+      <main className="max-w-3xl mx-auto px-6 py-12">
+        <article className="mb-16">
+          <h1 className="text-4xl font-bold tracking-tight mb-6">Decentralized Comments Demo</h1>
+          <p className="text-xl text-accents-5 mb-6">
+            This is a demo of the DeCom microservice embedded in a standard web page.
+          </p>
+          <div className="prose dark:prose-invert text-accents-6 leading-relaxed space-y-4">
+            <p>
+              The comment section below is a self-contained component that interacts directly with the blockchain.
+              It persists data on-chain, ensuring censorship resistance and permanent availability.
+            </p>
+            <p>
+              Integration is as simple as dropping the <code>&lt;CommentSection /&gt;</code> component into your React application.
+            </p>
+          </div>
+        </article>
 
-          <main className="max-w-2xl mx-auto px-6 py-12">
-            <CommentSection topic="general-discussion" />
-          </main>
-
-          <Toaster position="bottom-right" />
+        <div className="border-t border-accents-2 pt-12">
+          <CommentSection topic="demo-article-slug" />
         </div>
-      </QueryClientProvider>
-    </WagmiProvider>
+      </main>
+      <Toaster position="bottom-right" theme="system" />
+    </div>
   );
 }
 

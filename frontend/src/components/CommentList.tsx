@@ -1,8 +1,7 @@
-import { MessageSquare, User, Clock } from 'lucide-react';
+import { User, Clock } from 'lucide-react';
 import { Comment } from '../config/contract';
 import { cn } from '../lib/utils';
 import { LikeButton } from './LikeButton';
-import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
@@ -14,14 +13,10 @@ interface CommentListProps {
 function CommentList({ comments, topic }: CommentListProps) {
   if (comments.length === 0) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center justify-center py-16 text-center glass-card rounded-xl"
-      >
-        <MessageSquare className="w-16 h-16 text-slate-600 mb-4" />
-        <p className="text-slate-400 text-lg">暂无评论，快来发表第一条评论吧！</p>
-      </motion.div>
+      <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-accents-2 rounded-lg">
+        <p className="text-accents-5 text-lg font-medium">No comments yet</p>
+        <p className="text-sm text-accents-4 mt-1">Be the first to share your thoughts!</p>
+      </div>
     );
   }
 
@@ -36,48 +31,49 @@ function CommentList({ comments, topic }: CommentListProps) {
         locale: zhCN
       });
     } catch (e) {
-      return '刚刚';
+      return 'Just now';
     }
   };
 
   return (
     <div className="space-y-4">
-      {comments.map((comment, index) => (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
+      {comments.map((comment) => (
+        <div
           key={comment.id.toString()}
           className={cn(
-            "glass-card rounded-xl p-5",
-            "transition-all duration-200 hover:border-primary/30"
+            "border border-accents-2 rounded-lg p-6 bg-background",
+            "hover:border-accents-4 transition-colors duration-200"
           )}
         >
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3 text-sm text-slate-400">
-              <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-white/5">
-                <User className="w-3 h-3" />
-                <span className="font-mono font-medium text-slate-300">{formatAddress(comment.author)}</span>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-accents-2 to-accents-3 flex items-center justify-center">
+                <User className="w-4 h-4 text-accents-6" />
               </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-3 h-3" />
-                <span>{formatTime(comment.timestamp)}</span>
+              <div>
+                <div className="font-mono font-medium text-foreground text-sm">
+                  {formatAddress(comment.author)}
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-accents-4">
+                  <Clock className="w-3 h-3" />
+                  <span>{formatTime(comment.timestamp)}</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="text-slate-200 leading-relaxed whitespace-pre-wrap mb-4 pl-1">
+          <div className="text-foreground leading-relaxed whitespace-pre-wrap mb-4 pl-11 text-base">
             {comment.content}
           </div>
 
-          <div className="flex items-center gap-4 pt-3 border-t border-white/5">
+          <div className="flex items-center gap-4 pt-4 border-t border-accents-2 pl-11">
             <LikeButton
               topic={topic}
               commentId={comment.id}
               initialLikes={comment.likes}
             />
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   );

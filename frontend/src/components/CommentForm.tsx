@@ -47,39 +47,41 @@ function CommentForm({ topic, onSuccess }: CommentFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative">
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="What are your thoughts?"
-        className={cn(
-          "w-full min-h-[100px] p-4 rounded-lg border border-border bg-white",
-          "text-sm placeholder:text-gray-400",
-          "focus:outline-none focus:ring-1 focus:ring-black focus:border-black",
-          "resize-y transition-all duration-200",
-          "disabled:opacity-50 disabled:cursor-not-allowed"
-        )}
-        disabled={isPending || isConfirming}
-      />
-      <div className="flex justify-end mt-3">
-        <button
-          type="submit"
-          disabled={!content.trim() || isPending || isConfirming}
+    <form onSubmit={handleSubmit} className="relative mb-8">
+      <div className="relative">
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="What are your thoughts?"
           className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium",
-            "bg-black text-white transition-all hover:bg-gray-800",
+            "w-full min-h-[120px] p-4 rounded-lg border border-accents-2 bg-background",
+            "text-base placeholder:text-accents-3",
+            "focus:outline-none focus:ring-1 focus:ring-foreground focus:border-foreground",
+            "resize-y transition-all duration-200",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
-        >
-          {isPending || isConfirming ? (
-            <>
-              <Loader2 className="w-3 h-3 animate-spin" />
-              <span>Posting...</span>
-            </>
-          ) : (
-            <span>Post Comment</span>
-          )}
-        </button>
+          disabled={isPending || isConfirming}
+        />
+        <div className="absolute bottom-4 right-4">
+          <button
+            type="submit"
+            disabled={!content.trim() || isPending || isConfirming}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium",
+              "bg-foreground text-background hover:bg-accents-7 transition-colors",
+              "disabled:opacity-50 disabled:cursor-not-allowed"
+            )}
+          >
+            {isPending || isConfirming ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Posting...</span>
+              </>
+            ) : (
+              <span>Post Comment</span>
+            )}
+          </button>
+        </div>
       </div>
     </form>
   );
