@@ -1,7 +1,8 @@
 import { useReadContract } from 'wagmi';
 import { Loader2 } from 'lucide-react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { CONTRACT_ADDRESS, CONTRACT_ABI, Comment } from '../config/contract';
+import { Comment } from '../config/contract';
+import { useDeComConfig } from '../context/DeComContext';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 
@@ -10,9 +11,10 @@ interface CommentSectionProps {
 }
 
 function CommentSection({ topic }: CommentSectionProps) {
+  const { contractAddress, abi } = useDeComConfig();
   const { data: comments, isLoading, refetch } = useReadContract({
-    address: CONTRACT_ADDRESS,
-    abi: CONTRACT_ABI,
+    address: contractAddress,
+    abi: abi,
     functionName: 'getComments',
     args: [topic],
   });
@@ -46,7 +48,7 @@ function CommentSection({ topic }: CommentSectionProps) {
 
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-accents-2">
         <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-          {comments?.length || 0} Comments
+          {(comments as Comment[])?.length || 0} Comments
         </h3>
       </div>
 

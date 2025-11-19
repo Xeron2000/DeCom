@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { Loader2 } from 'lucide-react';
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../config/contract';
+import { Loader2, Send } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { toast } from 'sonner';
+import { useDeComConfig } from '../context/DeComContext';
 
 interface CommentFormProps {
   topic: string;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 function CommentForm({ topic, onSuccess }: CommentFormProps) {
   const [content, setContent] = useState('');
-
+  const { contractAddress, abi } = useDeComConfig();
   const { data: hash, writeContract, isPending, reset } = useWriteContract();
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
@@ -23,7 +23,7 @@ function CommentForm({ topic, onSuccess }: CommentFormProps) {
     if (isSuccess) {
       toast.success('Comment posted successfully!');
       setContent('');
-      onSuccess();
+      if (onSuccess) onSuccess();
       reset();
     }
   }, [isSuccess, onSuccess, reset]);
@@ -34,8 +34,8 @@ function CommentForm({ topic, onSuccess }: CommentFormProps) {
 
     try {
       writeContract({
-        address: CONTRACT_ADDRESS,
-        abi: CONTRACT_ABI,
+        address: contractAddress,
+        abi: abi,
         functionName: 'postComment',
         args: [topic, content],
       });
@@ -78,7 +78,9 @@ function CommentForm({ topic, onSuccess }: CommentFormProps) {
                 <span>Posting...</span>
               </>
             ) : (
-              <span>Post Comment</span>
+              <span className="flex items-center gap-2">
+                Post Comment <Send className="w-3 h-3" />
+              </span>
             )}
           </button>
         </div>
