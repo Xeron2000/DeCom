@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        background-color: #ffffff;
+        color: #000000;
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection {
+        background-color: #000000;
+        color: #ffffff;
+    }
+}
+
+@layer utilities {
+    .glass {
+        @apply bg-white/80 backdrop-blur-md border-b border-gray-200;
+    }
+
+    .glass-card {
+        @apply bg-white border border-gray-200 shadow-sm;
+    }
+}

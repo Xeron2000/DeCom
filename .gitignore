@@ -13,3 +13,5 @@ artifacts
 frontend/dist
 frontend/node_modules
 frontend/.env.local
+
+.spec-workflow

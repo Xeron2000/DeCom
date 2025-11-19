@@ -16,6 +16,16 @@ export const CONTRACT_ABI = [
   },
   {
     "inputs": [
+      { "internalType": "string", "name": "_topic", "type": "string" },
+      { "internalType": "uint256", "name": "_commentId", "type": "uint256" }
+    ],
+    "name": "likeComment",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "string", "name": "_topic", "type": "string" }
     ],
     "name": "getComments",
@@ -25,7 +35,8 @@ export const CONTRACT_ABI = [
           { "internalType": "uint256", "name": "id", "type": "uint256" },
           { "internalType": "address", "name": "author", "type": "address" },
           { "internalType": "string", "name": "content", "type": "string" },
-          { "internalType": "uint256", "name": "timestamp", "type": "uint256" }
+          { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+          { "internalType": "uint256", "name": "likes", "type": "uint256" }
         ],
         "internalType": "struct CommentSystem.Comment[]",
         "name": "",
@@ -45,6 +56,17 @@ export const CONTRACT_ABI = [
     ],
     "name": "CommentPosted",
     "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "string", "name": "topic", "type": "string" },
+      { "indexed": true, "internalType": "uint256", "name": "commentId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "liker", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "newLikeCount", "type": "uint256" }
+    ],
+    "name": "CommentLiked",
+    "type": "event"
   }
 ] as const;
 
@@ -53,4 +75,5 @@ export interface Comment {
   author: string;
   content: string;
   timestamp: bigint;
+  likes: bigint;
 }

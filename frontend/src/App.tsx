@@ -1,26 +1,35 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { config } from './config/wagmi';
 import CommentSection from './components/CommentSection';
+import { Toaster } from 'sonner';
+
+const queryClient = new QueryClient();
 
 function App() {
-  const { isConnected } = useAccount();
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8">
-      <div className="container mx-auto px-4 max-w-3xl">
-        <div className="flex justify-end mb-6">
-          <ConnectButton />
-        </div>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen bg-background text-foreground selection:bg-black selection:text-white">
+          <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-sm">
+            <div className="max-w-5xl mx-auto flex h-16 items-center justify-between px-6">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-black rounded-full" />
+                <span className="font-bold text-lg tracking-tight">DeCom</span>
+              </div>
+              <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
+            </div>
+          </header>
 
-        {isConnected ? (
-          <CommentSection topic="article-001" />
-        ) : (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <p className="text-slate-600 text-lg">请先连接钱包以查看和发表评论</p>
-          </div>
-        )}
-      </div>
-    </div>
+          <main className="max-w-2xl mx-auto px-6 py-12">
+            <CommentSection topic="general-discussion" />
+          </main>
+
+          <Toaster position="bottom-right" />
+        </div>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 

@@ -2,85 +2,148 @@
   "address": "0x20eFe3c5D0749c533CAe196c2d1452f10Fa87304",
   "abi": [
     {
-      "type": "event",
-      "anonymous": false,
-      "name": "CommentPosted",
       "inputs": [
         {
-          "type": "string",
-          "name": "topic",
-          "indexed": true
+          "internalType": "string",
+          "name": "_topic",
+          "type": "string"
         },
         {
-          "type": "address",
-          "name": "author",
-          "indexed": true
-        },
-        {
-          "type": "string",
-          "name": "content",
-          "indexed": false
-        },
-        {
-          "type": "uint256",
-          "name": "timestamp",
-          "indexed": false
-        }
-      ]
-    },
-    {
-      "type": "function",
-      "name": "getComments",
-      "constant": true,
-      "stateMutability": "view",
-      "payable": false,
-      "inputs": [
-        {
-          "type": "string",
-          "name": "_topic"
+          "internalType": "string",
+          "name": "_content",
+          "type": "string"
         }
       ],
+      "name": "postComment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_topic",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_commentId",
+          "type": "uint256"
+        }
+      ],
+      "name": "likeComment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_topic",
+          "type": "string"
+        }
+      ],
+      "name": "getComments",
       "outputs": [
         {
-          "type": "tuple[]",
-          "name": "",
           "components": [
             {
-              "type": "uint256",
-              "name": "id"
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
             },
             {
-              "type": "address",
-              "name": "author"
+              "internalType": "address",
+              "name": "author",
+              "type": "address"
             },
             {
-              "type": "string",
-              "name": "content"
+              "internalType": "string",
+              "name": "content",
+              "type": "string"
             },
             {
-              "type": "uint256",
-              "name": "timestamp"
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "likes",
+              "type": "uint256"
             }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "function",
-      "name": "postComment",
-      "constant": false,
-      "payable": false,
-      "inputs": [
-        {
-          "type": "string",
-          "name": "_topic"
-        },
-        {
-          "type": "string",
-          "name": "_content"
+          ],
+          "internalType": "struct CommentSystem.Comment[]",
+          "name": "",
+          "type": "tuple[]"
         }
       ],
-      "outputs": []
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "string",
+          "name": "topic",
+          "type": "string"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "author",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "content",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "CommentPosted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "string",
+          "name": "topic",
+          "type": "string"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "commentId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "liker",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newLikeCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "CommentLiked",
+      "type": "event"
     }
   ]
 }

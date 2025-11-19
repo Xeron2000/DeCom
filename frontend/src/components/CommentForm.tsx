@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { Loader2, Send, CheckCircle2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../config/contract';
 import { cn } from '../lib/utils';
+import { toast } from 'sonner';
 
 interface CommentFormProps {
   topic: string;
@@ -20,12 +21,10 @@ function CommentForm({ topic, onSuccess }: CommentFormProps) {
 
   useEffect(() => {
     if (isSuccess) {
-      const timer = setTimeout(() => {
-        setContent('');
-        onSuccess();
-        reset();
-      }, 1000);
-      return () => clearTimeout(timer);
+      toast.success('Comment posted successfully!');
+      setContent('');
+      onSuccess();
+      reset();
     }
   }, [isSuccess, onSuccess, reset]);
 
@@ -33,65 +32,54 @@ function CommentForm({ topic, onSuccess }: CommentFormProps) {
     e.preventDefault();
     if (!content.trim()) return;
 
-    writeContract({
-      address: CONTRACT_ADDRESS,
-      abi: CONTRACT_ABI,
-      functionName: 'postComment',
-      args: [topic, content],
-    });
+    try {
+      writeContract({
+        address: CONTRACT_ADDRESS,
+        abi: CONTRACT_ABI,
+        functionName: 'postComment',
+        args: [topic, content],
+      });
+      toast.info('Please confirm the transaction in your wallet...');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to post comment. Please try again.');
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="relative">
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="输入你的评论..."
+        placeholder="What are your thoughts?"
         className={cn(
-          "w-full min-h-[120px] px-4 py-3 rounded-lg border border-slate-300",
-          "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-          "resize-vertical transition-all duration-200",
-          "disabled:bg-slate-100 disabled:cursor-not-allowed"
+          "w-full min-h-[100px] p-4 rounded-lg border border-border bg-white",
+          "text-sm placeholder:text-gray-400",
+          "focus:outline-none focus:ring-1 focus:ring-black focus:border-black",
+          "resize-y transition-all duration-200",
+          "disabled:opacity-50 disabled:cursor-not-allowed"
         )}
         disabled={isPending || isConfirming}
       />
-
-      <div className="flex items-center justify-between">
+      <div className="flex justify-end mt-3">
         <button
           type="submit"
           disabled={!content.trim() || isPending || isConfirming}
           className={cn(
-            "flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium",
-            "transition-all duration-200 shadow-sm",
-            "disabled:opacity-50 disabled:cursor-not-allowed",
-            isSuccess
-              ? "bg-green-500 hover:bg-green-600 text-white"
-              : "bg-blue-500 hover:bg-blue-600 text-white hover:shadow-md"
+            "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium",
+            "bg-black text-white transition-all hover:bg-gray-800",
+            "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >
           {isPending || isConfirming ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              {isPending ? '等待确认...' : '交易确认中...'}
-            </>
-          ) : isSuccess ? (
-            <>
-              <CheckCircle2 className="w-4 h-4" />
-              发表成功！
+              <Loader2 className="w-3 h-3 animate-spin" />
+              <span>Posting...</span>
             </>
           ) : (
-            <>
-              <Send className="w-4 h-4" />
-              发表评论
-            </>
+            <span>Post Comment</span>
           )}
         </button>
-
-        {hash && (
-          <div className="text-sm text-slate-600 font-mono">
-            交易: {hash.slice(0, 10)}...{hash.slice(-8)}
-          </div>
-        )}
       </div>
     </form>
   );

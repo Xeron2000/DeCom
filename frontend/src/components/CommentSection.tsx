@@ -22,25 +22,27 @@ function CommentSection({ topic }: CommentSectionProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-        <span className="ml-3 text-slate-600">加载评论中...</span>
+      <div className="flex items-center justify-center py-24">
+        <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="space-y-12">
+      <section>
+        <h2 className="text-2xl font-bold tracking-tight mb-6">Discussion</h2>
         <CommentForm topic={topic} onSuccess={handleCommentPosted} />
-      </div>
+      </section>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="text-sm text-slate-500 mb-4">
-          {comments?.length || 0} 条评论
+      <section>
+        <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
+          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+            {comments?.length || 0} Comments
+          </h3>
         </div>
-        <CommentList comments={(comments as Comment[]) || []} />
-      </div>
+        <CommentList comments={(comments as Comment[]) || []} topic={topic} />
+      </section>
     </div>
   );
 }
