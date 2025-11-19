@@ -22,7 +22,7 @@
 
 ```bash
 # 安装合约依赖
-cd decentralized-comments
+cd DeCom
 pnpm install
 
 # 安装前端依赖
@@ -86,7 +86,7 @@ pnpm dev
 ## 项目结构
 
 ```
-decentralized-comments/
+DeCom/
 ├── contracts/              # 智能合约
 │   └── CommentSystem.sol
 ├── scripts/               # 部署脚本
